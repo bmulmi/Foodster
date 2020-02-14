@@ -1,0 +1,7 @@
+{
+  "name": "Foodster",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
