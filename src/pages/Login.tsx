@@ -8,7 +8,8 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonRow
+  IonRow,
+  IonText
 } from "@ionic/react";
 import React from "react";
 import { IonGrid, IonCol } from "@ionic/react";
@@ -48,6 +49,11 @@ class Login extends React.Component<LoginProps, LoginState> {
               </IonCol>
             </IonRow>
           </IonGrid>
+          <IonItem>
+            <IonText>
+              <a href="/signup">Sign Up</a>
+            </IonText>
+          </IonItem>
         </IonContent>
       </IonPage>
     );
