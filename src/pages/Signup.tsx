@@ -15,6 +15,7 @@ import {
   IonChip
 } from "@ionic/react";
 import React from "react";
+import axios from "axios";
 
 export interface SignupProps {}
 
@@ -67,7 +68,26 @@ class Signup extends React.Component<SignupProps, SignupState> {
   }
 
   handleSubmit(event: any) {
+    event.preventDefault();
+    let data = new FormData();
+    data.append("firstName", this.state.firstName);
+    data.append("lastName", this.state.lastName);
+    data.append("email", this.state.email);
+    data.append("password", this.state.password);
+    data.append("dob", this.state.dob.toString());
+
+    // {
+    //   firstName: this.state.firstName,
+    //   lastName: this.state.lastName,
+    //   email: this.state.email,
+    //   password: this.state.password,
+    //   dob: this.state.dob
+    // };
     console.log("Submitted!");
+    console.log(data);
+    axios.post("http://127.0.0.1:5000/signup", data).then(res => {
+      console.log(res.data);
+    });
   }
 
   render() {

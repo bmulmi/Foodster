@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask import jsonify
 app = Flask("__main__")
@@ -32,6 +32,15 @@ def index():
 
     print(dat)
     return(jsonify(dat))
+
+
+@app.route('/signup', methods=['POST'])
+def singup_index():
+    user_data = request.form.copy()
+    print("data recieved")
+    for each in user_data:
+        print(user_data[each])
+    return("completed")
 
 
 app.run(debug=True)
