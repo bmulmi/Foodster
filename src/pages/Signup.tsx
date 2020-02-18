@@ -47,7 +47,6 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   handleFirstName(event: any) {
     this.setState({ firstName: event.target.value });
-    console.log("first name is " + this.state.firstName);
   }
 
   handleLastName(event: any) {
@@ -63,8 +62,7 @@ class Signup extends React.Component<SignupProps, SignupState> {
   }
 
   handleDOB(event: any) {
-    this.setState({ dob: event.target.value });
-    console.log("Date:" + this.state.dob);
+    this.setState({ dob: event.target.value.split("T")[0] });
   }
 
   handleSubmit(event: any) {
@@ -76,13 +74,6 @@ class Signup extends React.Component<SignupProps, SignupState> {
     data.append("password", this.state.password);
     data.append("dob", this.state.dob.toString());
 
-    // {
-    //   firstName: this.state.firstName,
-    //   lastName: this.state.lastName,
-    //   email: this.state.email,
-    //   password: this.state.password,
-    //   dob: this.state.dob
-    // };
     console.log("Submitted!");
     console.log(data);
     axios.post("http://127.0.0.1:5000/signup", data).then(res => {

@@ -10,7 +10,9 @@ import "./Home.css";
 import Posts from "../components/Posts";
 import axios from "axios";
 
-export interface HomeProps {}
+export interface HomeProps {
+  match: any;
+}
 
 export interface HomeState {
   posts: [];
@@ -24,8 +26,12 @@ class Home extends React.Component<HomeProps, HomeState> {
     };
   }
 
+  user_id = this.props.match.params.id;
+
   componentDidMount() {
-    axios.get("http://127.0.0.1:5000/").then(res => {
+    console.log("ID: ");
+    console.log(this.user_id);
+    axios.get("http://127.0.0.1:5000/home/" + this.user_id).then(res => {
       console.log("Data recieved:" + res.data);
       this.setState({ posts: res.data });
     });
