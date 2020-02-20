@@ -1,10 +1,13 @@
 from flask import Flask, request
 from flask_cors import CORS
 from flask import jsonify
+from database import *
+
 app = Flask("__main__")
 CORS(app)
+initialize()
 
-user = {'username': 'hnrs499', 'password': '12345', 'id': '1'}
+user = {'email': 'hnrs499', 'password': '12345', 'id': '1'}
 dat = [
     {
         'id': 1,
@@ -36,29 +39,29 @@ def index():
 @app.route('/login', methods=['POST'])
 def login_index():
     login_data = request.form.copy()
-    # print(login_data)
-    if checkLoginValidation(login_data):
-        return user["id"]
+    user_id = find_user(login_data)
+    if user_id:
+        return user_id
     else:
         return ("failure")
 
 
 def checkLoginValidation(data):
-    print(data["username"])
-    print(data["password"])
-    if data["username"] == user["username"] and data["password"] == user["password"]:
+    if data["email"] == user["username"] and data["password"] == user["password"]:
         return True
     else:
         return False
 
 
 @app.route('/signup', methods=['POST'])
-def singup_index():
+def signup_index():
     user_data = request.form.copy()
     print("data recieved")
     for each in user_data:
         print(user_data[each])
-    return("completed")
+    upsert_user(user_data)
+    user_id = find_user(user_data)
+    return str(user_id)
 
 
 @app.route('/home/<id>', methods=['GET'])
