@@ -67,8 +67,25 @@ def signup_index():
 @app.route('/home/<id>', methods=['GET'])
 def home_index(id):
     print("id recieved")
+    # use this id to get the user's {following} list
+    # use that list to get the posts from the vendors
     print(id)
     return (jsonify(dat))
+
+
+@app.route('/vendorwall/<id>', methods=['GET'])
+def vendorwall_index(id):
+    return (jsonify(dat))
+
+
+@app.route('/vendorpost/<id>', methods=['GET', 'POST'])
+def vedorpost_index(id):
+    if request.method == 'GET':
+        return "F"
+    else:
+        userdat = request.form.copy()
+        print(userdat)
+        return "G"
 
 
 app.run(debug=True)

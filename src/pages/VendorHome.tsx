@@ -10,15 +10,15 @@ import {
   IonPage,
   IonTitle
 } from "@ionic/react";
-import { home, map, options, search } from "ionicons/icons";
+import { search, newspaper, list, options } from "ionicons/icons";
 
 import React from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route, Redirect } from "react-router-dom";
 import "./Home.css";
-import Wall from "../components/user/Wall";
-import Maps from "../components/user/Maps";
-import Menu from "../components/user/Menu";
+import Wall from "../components/vendor/Wall";
+import MakePost from "../components/vendor/MakePost";
+import Menu from "../components/vendor/Menu";
 
 export interface HomeProps {
   match: any;
@@ -30,9 +30,9 @@ class Home extends React.Component<HomeProps, HomeState> {
   user_id = this.props.match.params.id;
 
   render() {
-    let maps_url = "/maps/" + this.user_id;
-    let wall_url = "/wall/" + this.user_id;
-    let menu_url = "/menu/" + this.user_id;
+    let new_post = "/newpost/" + this.user_id;
+    let wall_url = "/vendorwall/" + this.user_id;
+    let menu_url = "/vendormenu/" + this.user_id;
 
     return (
       <IonPage>
@@ -49,22 +49,22 @@ class Home extends React.Component<HomeProps, HomeState> {
           <IonReactRouter>
             <IonTabs>
               <IonRouterOutlet id="main">
-                <Route path="/wall/:id" component={Wall} />
-                <Route path="/maps/:id" component={Maps} />
-                <Route path="/menu/:id" component={Menu} />
-                <Route
-                  path="/home/:id"
+                <Route path="/vendorwall/:id" component={Wall} />
+                <Route path="/newpost/:id" component={MakePost} />
+                <Route path="/vendormenu/:id" component={Menu} />
+                {/* <Route
+                  path="/vendorhome/:id"
                   render={() => <Redirect to={wall_url} />}
                   exact={true}
-                />
+                /> */}
               </IonRouterOutlet>
 
               <IonTabBar slot="top">
                 <IonTabButton tab="wall" href={wall_url}>
-                  <IonIcon icon={home} />
+                  <IonIcon icon={list} />
                 </IonTabButton>
-                <IonTabButton tab="maps" href={maps_url}>
-                  <IonIcon icon={map} />
+                <IonTabButton tab="newpost" href={new_post}>
+                  <IonIcon icon={newspaper} />
                 </IonTabButton>
                 <IonTabButton tab="menu" href={menu_url}>
                   <IonIcon icon={options} />

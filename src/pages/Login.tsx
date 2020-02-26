@@ -11,7 +11,8 @@ import {
   IonRow,
   IonGrid,
   IonCol,
-  IonText
+  IonText,
+  IonFooter
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
@@ -105,10 +106,17 @@ class Login extends React.Component<LoginProps, LoginState> {
             </IonGrid>
             <IonItem>
               <IonText>
-                <a href="/signup">Sign Up</a>
+                <a href="/signup">Sign-up</a>
               </IonText>
             </IonItem>
           </IonContent>
+          <IonFooter>
+            <IonItem>
+              <IonText>
+                <a href="/vendorsignup">Vendor Sign-up </a>
+              </IonText>
+            </IonItem>
+          </IonFooter>
         </IonPage>
       );
     }

@@ -5,7 +5,10 @@ import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-
+import Wall from "./components/user/Wall";
+import Maps from "./components/user/Maps";
+import Vendorsignup from "./pages/VendorSignup";
+import Vendorhome from "./pages/VendorHome";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -28,17 +31,24 @@ import "./theme/variables.css";
 /* Global CSS */
 import "./global.css";
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home/:id" component={Home} />
-        <Route path="/login" component={Login} exact={true} />
-        <Route path="/signup" component={Signup} />
-        <Route exact path="/" render={() => <Redirect to="/login" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet id="main">
+          <Route path="/wall/" component={Wall} />
+          <Route path="/maps/" component={Maps} />
+          <Route path="/home/:id" component={Home} />
+          <Route path="/login" component={Login} exact={true} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/vendorsignup" component={Vendorsignup} />
+          <Route path="/vendorhome/:id" component={Vendorhome} />
+
+          <Route exact path="/" render={() => <Redirect to="/login" />} />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
