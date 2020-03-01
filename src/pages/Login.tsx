@@ -70,10 +70,9 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   render() {
     if (this.state.success) {
-      let url_id = "/home/" + this.state.id;
       return (
         <Route>
-          <Redirect to={url_id}></Redirect>
+          <Redirect to={`/home/${this.state.id}`} />
         </Route>
       );
     } else {
@@ -112,6 +111,9 @@ class Login extends React.Component<LoginProps, LoginState> {
           </IonContent>
           <IonFooter>
             <IonItem>
+              <IonText>
+                <a href="/vendorlogin">Vendor Login</a>
+              </IonText>
               <IonText>
                 <a href="/vendorsignup">Vendor Sign-up </a>
               </IonText>

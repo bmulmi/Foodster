@@ -24,15 +24,22 @@ export interface HomeProps {
   match: any;
 }
 
-export interface HomeState {}
+export interface HomeState {
+  user_id: string;
+}
 
 class Home extends React.Component<HomeProps, HomeState> {
-  user_id = this.props.match.params.id;
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      user_id: ""
+    };
+  }
 
   render() {
-    let maps_url = "/maps/" + this.user_id;
-    let wall_url = "/wall/" + this.user_id;
-    let menu_url = "/menu/" + this.user_id;
+    let maps_url = "/maps/" + this.props.match.params.id;
+    let wall_url = "/wall/" + this.props.match.params.id;
+    let menu_url = "/menu/" + this.props.match.params.id;
 
     return (
       <IonPage>

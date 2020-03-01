@@ -63,7 +63,7 @@ class MakePost extends React.Component<MakePostProps, MakePostState> {
     data.append("description", this.state.description);
     data.append("validFrom", this.state.validFrom.toString());
     data.append("validUntil", this.state.validUntil.toString());
-    data.append("timeStamp", date.toISOString());
+    data.append("timeStamp", date.toISOString().split(".")[0]);
     console.log(data);
 
     axios

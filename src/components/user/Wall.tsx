@@ -11,7 +11,6 @@ import Posts from "./Posts";
 
 export interface WallProps {
   match: any;
-  user_id: string;
 }
 
 export interface WallState {
@@ -26,15 +25,13 @@ class Wall extends React.Component<WallProps, WallState> {
     };
   }
 
-  user_id = this.props.match.params.id;
-
   componentDidMount() {
-    console.log("ID: ");
-    console.log(this.props.user_id);
-    axios.get("http://127.0.0.1:5000/home/" + this.props.user_id).then(res => {
-      console.log("Data recieved:" + res.data);
-      this.setState({ posts: res.data });
-    });
+    axios
+      .get("http://127.0.0.1:5000/home/" + this.props.match.params.id)
+      .then(res => {
+        // console.log("Data recieved:" + res.data);
+        this.setState({ posts: res.data });
+      });
   }
 
   render() {

@@ -78,14 +78,13 @@ class Vendorsignup extends React.Component<
   handleSubmit(event: any) {
     event.preventDefault();
     let data = new FormData();
-    data.append("firstName", this.state.name);
+    data.append("name", this.state.name);
     data.append("location", this.state.location);
     data.append("latitude", this.state.latitude);
     data.append("longitude", this.state.longitude);
     data.append("email", this.state.email);
     data.append("password", this.state.password);
     data.append("description", this.state.description);
-
     console.log(data);
     axios.post("http://127.0.0.1:5000/vendorsignup", data).then(res => {
       if (res.data === "failure") {

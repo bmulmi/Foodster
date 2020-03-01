@@ -53,6 +53,16 @@ def checkLoginValidation(data):
         return False
 
 
+@app.route('/vendorlogin', methods=['POST'])
+def vendor_login():
+    login_data = request.form.copy()
+    vendor_id = find_vendor(login_data)
+    if vendor_id:
+        return vendor_id
+    else:
+        return ("failure")
+
+
 @app.route('/signup', methods=['POST'])
 def signup_index():
     user_data = request.form.copy()
@@ -66,11 +76,20 @@ def signup_index():
 
 @app.route('/home/<id>', methods=['GET'])
 def home_index(id):
-    print("id recieved")
-    # use this id to get the user's {following} list
-    # use that list to get the posts from the vendors
-    print(id)
-    return (jsonify(dat))
+    data = get_wall_feed(id)
+    print(jsonify(data))
+    return (jsonify(data))
+
+
+@app.route('/vendorsignup', methods=['POST'])
+def signup_vendor():
+    vendor_data = request.form.copy()
+    print("vendor data recieved")
+    for each in vendor_data:
+        print(vendor_data[each])
+    upsert_vendor(vendor_data)
+    vendor_id = find_vendor(vendor_data)
+    return str(vendor_id)
 
 
 @app.route('/vendorwall/<id>', methods=['GET'])
@@ -83,9 +102,11 @@ def vedorpost_index(id):
     if request.method == 'GET':
         return "F"
     else:
-        userdat = request.form.copy()
-        print(userdat)
-        return "G"
+        vendor_data = request.form.copy()
+        print(vendor_data)
+        print(id)
+        add_new_post(id, vendor_data)
+        return "success"
 
 
 app.run(debug=True)
