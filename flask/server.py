@@ -109,4 +109,11 @@ def vedorpost_index(id):
         return "success"
 
 
+@app.route('/search', methods=['GET'])
+def search_vendors():
+    data = get_all_vendors()
+    print(jsonify(data))
+    return (jsonify(data))
+
+
 app.run(debug=True)

@@ -16,6 +16,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
+import url from "../server_url";
 import { Route, Redirect } from "react-router";
 export interface LoginProps {}
 
@@ -54,7 +55,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     data.append("email", this.state.username);
     data.append("password", this.state.password);
     axios
-      .post("http://127.0.0.1:5000/vendorlogin", data)
+      .post(url + "/vendorlogin", data)
       .then(res => {
         if (res.data === "failure") {
           this.setState({ success: false });

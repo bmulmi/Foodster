@@ -16,6 +16,8 @@ import {
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
+import url from "../server_url";
+
 import { Route, Redirect } from "react-router";
 
 export interface SignupProps {}
@@ -79,15 +81,15 @@ class Signup extends React.Component<SignupProps, SignupState> {
     data.append("password", this.state.password);
     data.append("dob", this.state.dob.toString());
 
-    console.log(data);
-    axios.post("http://127.0.0.1:5000/signup", data).then(res => {
+    // console.log(data);
+    axios.post(url + "/signup", data).then(res => {
       if (res.data === "failure") {
         this.setState({ success: false });
-        console.log(res.data);
+        // console.log(res.data);
       } else {
         this.setState({ success: true, id: res.data });
       }
-      console.log(res.data);
+      // console.log(res.data);
     });
   }
 

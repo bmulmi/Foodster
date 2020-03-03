@@ -13,6 +13,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
+import url from "../../server_url";
 
 export interface MakePostProps {
   match: any;
@@ -66,15 +67,13 @@ class MakePost extends React.Component<MakePostProps, MakePostState> {
     data.append("timeStamp", date.toISOString().split(".")[0]);
     console.log(data);
 
-    axios
-      .post("http://127.0.0.1:5000/vendorpost/" + this.user_id, data)
-      .then(res => {
-        if (res.data === "failure") {
-          //make toast about failure and reload page
-        } else {
-          //make toast about success and reload page
-        }
-      });
+    axios.post(url + "/vendorpost/" + this.user_id, data).then(res => {
+      if (res.data === "failure") {
+        //make toast about failure and reload page
+      } else {
+        //make toast about success and reload page
+      }
+    });
   }
   render() {
     return (

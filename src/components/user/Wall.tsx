@@ -8,6 +8,7 @@ import {
 import React from "react";
 import axios from "axios";
 import Posts from "./Posts";
+import url from "../../server_url";
 
 export interface WallProps {
   match: any;
@@ -26,12 +27,10 @@ class Wall extends React.Component<WallProps, WallState> {
   }
 
   componentDidMount() {
-    axios
-      .get("http://127.0.0.1:5000/home/" + this.props.match.params.id)
-      .then(res => {
-        // console.log("Data recieved:" + res.data);
-        this.setState({ posts: res.data });
-      });
+    axios.get(url + "/home/" + this.props.match.params.id).then(res => {
+      // console.log("Data recieved:" + res.data);
+      this.setState({ posts: res.data });
+    });
   }
 
   render() {

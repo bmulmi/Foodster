@@ -40,7 +40,7 @@ const appPages: AppPage[] = [
 ];
 
 const Menu: React.FC<MenuProps> = ({ user_id }) => {
-  console.log("from Maps " + user_id);
+  console.log("from Menu " + user_id);
   return (
     <IonPage>
       <IonContent>

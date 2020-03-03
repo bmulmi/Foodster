@@ -8,6 +8,7 @@ import {
 import React from "react";
 import axios from "axios";
 import Posts from "./Posts";
+import url from "../../server_url";
 
 export interface WallProps {
   match: any;
@@ -31,12 +32,10 @@ class Wall extends React.Component<WallProps, WallState> {
   componentDidMount() {
     console.log("ID: ");
     console.log(this.props.user_id);
-    axios
-      .get("http://127.0.0.1:5000/vendorwall/" + this.props.user_id)
-      .then(res => {
-        console.log("Data recieved:" + res.data);
-        this.setState({ posts: res.data });
-      });
+    axios.get(url + "/vendorwall/" + this.props.user_id).then(res => {
+      console.log("Data recieved:" + res.data);
+      this.setState({ posts: res.data });
+    });
   }
 
   render() {

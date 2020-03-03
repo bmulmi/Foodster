@@ -15,6 +15,8 @@ import {
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
+import url from "../server_url";
+
 import { Route, Redirect } from "react-router";
 
 export interface VendorsignupProps {}
@@ -86,7 +88,7 @@ class Vendorsignup extends React.Component<
     data.append("password", this.state.password);
     data.append("description", this.state.description);
     console.log(data);
-    axios.post("http://127.0.0.1:5000/vendorsignup", data).then(res => {
+    axios.post(url + "/vendorsignup", data).then(res => {
       if (res.data === "failure") {
         this.setState({ success: false });
         console.log(res.data);

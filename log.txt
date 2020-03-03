@@ -4,3 +4,5 @@
 - server will now return the user's "_id" as string after login and sign up,
     else returns "failure"
 - TODO: call database functions when redirected to home with the user _id
+
+- Change Menu and Maps tabs structure

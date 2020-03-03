@@ -114,6 +114,17 @@ def follow_vendor(user_id, vendor_id):
         upsert_user(user)
 
 
+def get_all_vendors():
+    data = vendors.find()
+    all_vendors = list()
+    for each in data:
+        temp = str(each['_id'])
+        each['_id'] = temp
+        each['id'] = temp
+        all_vendors.append(each)
+    return all_vendors
+
+
 def get_wall_feed(id):
     user = users.find_one({'_id': ObjectId(id)})
     following = user['following']

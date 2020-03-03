@@ -8,7 +8,8 @@ import {
   IonHeader,
   IonToolbar,
   IonPage,
-  IonTitle
+  IonTitle,
+  IonButton
 } from "@ionic/react";
 import { home, map, options, search } from "ionicons/icons";
 
@@ -34,22 +35,33 @@ class Home extends React.Component<HomeProps, HomeState> {
     this.state = {
       user_id: ""
     };
+    this.goToSearch = this.goToSearch.bind(this);
   }
 
+  goToSearch() {
+    let search_url = "/search/" + this.props.match.params.id;
+
+    return <Redirect to={search_url} />;
+  }
   render() {
     let maps_url = "/maps/" + this.props.match.params.id;
     let wall_url = "/wall/" + this.props.match.params.id;
     let menu_url = "/menu/" + this.props.match.params.id;
+    let search_url = "/search/" + this.props.match.params.id;
 
     return (
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>
-              Foodster
-              {/* <IonSearchbar animated></IonSearchbar> */}
-            </IonTitle>
-            <IonIcon slot="end" icon={search} />
+            <IonTitle>Foodster</IonTitle>
+            <IonButton
+              slot="end"
+              color="dark"
+              routerLink={search_url}
+              routerDirection="forward"
+            >
+              <IonIcon slot="icon-only" icon={search} />
+            </IonButton>
           </IonToolbar>
         </IonHeader>
         <IonContent>
