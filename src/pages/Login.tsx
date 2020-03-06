@@ -81,44 +81,97 @@ class Login extends React.Component<LoginProps, LoginState> {
         <IonPage>
           <IonHeader>
             <IonToolbar>
-              <IonTitle>Foodster</IonTitle>
+              <p className="toolbar-font ion-text-center">Foodster</p>
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
-            Welcome to Foodster!
-            <IonItem>
-              <IonLabel position="floating">username</IonLabel>
-              <IonInput type="text" onIonInput={this.handleUsername}></IonInput>
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating">password</IonLabel>
-              <IonInput
-                type="password"
-                onIonInput={this.handlePassword}
-              ></IonInput>
-            </IonItem>
             <IonGrid>
-              <IonRow className="ion-align-items-center">
-                <IonCol className="ion-align-self-end">
+              <IonRow>
+                <IonCol />{" "}
+              </IonRow>
+              <IonRow>
+                <IonCol />{" "}
+              </IonRow>
+              <IonRow>
+                <IonCol />{" "}
+              </IonRow>
+
+              <IonRow>
+                <IonCol>
+                  <IonItem
+                    lines="none"
+                    className="title-font ion-text-center ion-margin-vertical"
+                  >
+                    <IonLabel>
+                      <h1> Welcome to Foodster!</h1>
+                    </IonLabel>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+
+              <IonRow>
+                <IonCol />{" "}
+              </IonRow>
+              <IonRow>
+                <IonCol />{" "}
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="floating">username</IonLabel>
+                    <IonInput
+                      type="text"
+                      onIonInput={this.handleUsername}
+                    ></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="floating">password</IonLabel>
+                    <IonInput
+                      type="password"
+                      onIonInput={this.handlePassword}
+                    ></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol size="4" />
+                <IonCol
+                  size="4"
+                  className="ion-text-center ion-padding-vertical ion-margin-vertical"
+                >
                   <IonButton onClick={this.handleSubmit}>Login</IonButton>
+                </IonCol>
+                <IonCol size="4" />
+              </IonRow>
+              <IonRow>
+                <IonCol size="4" />
+                <IonCol size="4" className="ion-text-center ion-padding">
+                  <a href="/signup">Sign-up</a>
+                </IonCol>
+                <IonCol size="4" />
+              </IonRow>
+            </IonGrid>
+          </IonContent>
+          <IonFooter>
+            <IonGrid>
+              <IonRow>
+                <IonCol size="4">
+                  <IonText className="ion-text-center">
+                    <a href="/vendorlogin">Vendor Login</a>
+                  </IonText>
+                </IonCol>
+                <IonCol size="4"></IonCol>
+                <IonCol size="4">
+                  <IonText className="ion-text-center">
+                    <a href="/vendorsignup">Vendor Sign-up </a>
+                  </IonText>
                 </IonCol>
               </IonRow>
             </IonGrid>
-            <IonItem>
-              <IonText>
-                <a href="/signup">Sign-up</a>
-              </IonText>
-            </IonItem>
-          </IonContent>
-          <IonFooter>
-            <IonItem>
-              <IonText>
-                <a href="/vendorlogin">Vendor Login</a>
-              </IonText>
-              <IonText>
-                <a href="/vendorsignup">Vendor Sign-up </a>
-              </IonText>
-            </IonItem>
           </IonFooter>
         </IonPage>
       );

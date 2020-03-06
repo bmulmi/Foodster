@@ -1,4 +1,4 @@
-import { IonContent, IonTitle } from "@ionic/react";
+import { IonContent } from "@ionic/react";
 import React from "react";
 import Post from "./Post";
 

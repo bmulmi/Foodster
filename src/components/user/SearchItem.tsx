@@ -1,10 +1,4 @@
-import {
-  IonItem,
-  IonCard,
-  IonText,
-  IonCardHeader,
-  IonCardTitle
-} from "@ionic/react";
+import { IonItem, IonLabel } from "@ionic/react";
 import React from "react";
 
 export function handleClick(event: any) {
@@ -16,7 +10,7 @@ const Item = ({ userId = "", vendorId = "", name = "" }) => (
     routerLink={`/vendorpage/${vendorId}/${userId}`}
     routerDirection="forward"
   >
-    {name}
+    <IonLabel>{name}</IonLabel>
   </IonItem>
 );
 

@@ -2,7 +2,6 @@ import {
   IonPage,
   IonContent,
   IonItem,
-  IonInput,
   IonLabel,
   IonDatetime,
   IonButton,
@@ -106,7 +105,7 @@ class MakePost extends React.Component<MakePostProps, MakePostState> {
                   onIonChange={this.handleValidUntil}
                 ></IonDatetime>
               </IonItem>
-              <IonItem>
+              <IonItem className="ion-text-center">
                 <IonButton onClick={this.handleSubmit}>Post</IonButton>
               </IonItem>
             </IonCardContent>

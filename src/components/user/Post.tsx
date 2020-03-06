@@ -1,12 +1,7 @@
 import {
   IonCardSubtitle,
   IonCard,
-  IonGrid,
-  IonText,
-  IonRow,
-  IonCol,
   IonAvatar,
-  IonCardHeader,
   IonCardTitle,
   IonItem,
   IonLabel

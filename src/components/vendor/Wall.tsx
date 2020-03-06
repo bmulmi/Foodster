@@ -1,10 +1,4 @@
-import {
-  IonContent,
-  IonPage,
-  IonRouterOutlet,
-  IonButtons,
-  IonMenuButton
-} from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import React from "react";
 import axios from "axios";
 import Posts from "./Posts";

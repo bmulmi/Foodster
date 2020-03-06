@@ -8,7 +8,6 @@ import {
   IonButtons,
   IonTitle,
   IonItem,
-  IonNote,
   IonButton,
   IonLabel,
   IonImg,
@@ -17,7 +16,6 @@ import {
   IonRow,
   IonCol,
   IonIcon,
-  IonText,
   IonCardSubtitle,
   IonItemDivider
 } from "@ionic/react";

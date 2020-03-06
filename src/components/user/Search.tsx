@@ -8,9 +8,7 @@ import {
   IonButtons,
   IonSearchbar,
   IonContent,
-  IonItem,
-  IonList,
-  IonInput
+  IonList
 } from "@ionic/react";
 import SearchItem from "./SearchItem";
 import url from "../../server_url";
