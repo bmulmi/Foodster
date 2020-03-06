@@ -1,0 +1,26 @@
+:root .subtitle-font {
+  --ion-font-family: "Subtitle";
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+.title-font {
+  --ion-font-family: "Title";
+  font-family: "Spartan", sans-serif;
+}
+
+.regular-font {
+  --ion-font-family: "Regular";
+  font-family: "Roboto", sans-serif;
+}
+
+.secondary-font {
+  --ion-font-family: "Secondary";
+  font-family: "Open Sans", sans-serif;
+}
+
+.toolbar-font {
+  --ion-font-family: "Toolbar";
+  font-family: "PT Sans", sans-serif;
+  font-size: x-large;
+  line-height: 1pt;
+}

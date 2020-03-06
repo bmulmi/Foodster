@@ -112,6 +112,21 @@ def follow_vendor(user_id, vendor_id):
         following.append(vendor_id)
         user['following'] = following
         upsert_user(user)
+    user['_id'] = str(user['_id'])
+    user['id'] = str(user['_id'])
+    return user
+
+
+def unfollow_vendor(user_id, vendor_id):
+    user = users.find_one({'_id': ObjectId(user_id)})
+    following = user['following']
+    if vendor_id in following:
+        following.remove(vendor_id)
+        user['following'] = following
+        upsert_user(user)
+    user['_id'] = str(user['_id'])
+    user['id'] = str(user['_id'])
+    return user
 
 
 def get_all_vendors():
@@ -157,12 +172,27 @@ def get_wall_feed(id):
     return posts_sorted
 
 
+def get_vendor_info(vendorId):
+    vendor = vendors.find_one({'_id': ObjectId(vendorId)})
+    vendor['_id'] = str(vendor['_id'])
+    vendor['id'] = vendor['_id']
+    return vendor
+
+
+def get_user_info(userId):
+    user = users.find_one({'_id': ObjectId(userId)})
+    user['_id'] = str(user['_id'])
+    user['id'] = user['_id']
+    return user
+
+
 def debuging():
     initialize()
     user = find_user({'email': 'bmulmi@ramapo.edu'})
-    # vendor = find_vendor({'email': 'mahwahbng@gmail.com'})
-    # follow_vendor(user, vendor)
-    get_wall_feed(user)
+    vendor = find_vendor({'email': 'sodexomyway@ramapo.edu'})
+    dat = follow_vendor(user, vendor)
+    # get_wall_feed(user)
+    print(dat)
 
 
 # debuging()

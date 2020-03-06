@@ -5,11 +5,14 @@ import {
   IonTabButton,
   IonIcon,
   IonTabs,
+  IonRow,
+  IonCol,
   IonHeader,
   IonToolbar,
   IonPage,
   IonTitle,
-  IonButton
+  IonButton,
+  IonGrid
 } from "@ionic/react";
 import { home, map, options, search } from "ionicons/icons";
 
@@ -53,15 +56,28 @@ class Home extends React.Component<HomeProps, HomeState> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Foodster</IonTitle>
-            <IonButton
-              slot="end"
-              color="dark"
-              routerLink={search_url}
-              routerDirection="forward"
-            >
-              <IonIcon slot="icon-only" icon={search} />
-            </IonButton>
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <p className="toolbar-font ion-padding-horizontal">
+                    Foodster
+                  </p>
+                </IonCol>
+                <IonCol size="2" className="ion-padding-top">
+                  <IonButton
+                    className="ion-margin-verticle"
+                    color="primary"
+                    fill="solid"
+                    size="small"
+                    shape="round"
+                    routerLink={search_url}
+                    routerDirection="forward"
+                  >
+                    <IonIcon slot="icon-only" icon={search} />
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -71,11 +87,11 @@ class Home extends React.Component<HomeProps, HomeState> {
                 <Route path="/wall/:id" component={Wall} />
                 <Route path="/maps/:id" component={Maps} />
                 <Route path="/menu/:id" component={Menu} />
-                <Route
+                {/* <Route
                   path="/home/:id"
                   render={() => <Redirect to={wall_url} />}
                   exact={true}
-                />
+                /> */}
               </IonRouterOutlet>
 
               <IonTabBar slot="top">

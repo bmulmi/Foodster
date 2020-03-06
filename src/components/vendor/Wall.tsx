@@ -12,29 +12,26 @@ import url from "../../server_url";
 
 export interface WallProps {
   match: any;
-  user_id: string;
 }
 
 export interface WallState {
-  posts: [];
+  data: any;
 }
 
 class Wall extends React.Component<WallProps, WallState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      posts: []
+      data: []
     };
   }
 
-  user_id = this.props.match.params.id;
-
   componentDidMount() {
     console.log("ID: ");
-    console.log(this.props.user_id);
-    axios.get(url + "/vendorwall/" + this.props.user_id).then(res => {
+    console.log(this.props.match.params.id);
+    axios.get(url + "/vendorwall/" + this.props.match.params.id).then(res => {
       console.log("Data recieved:" + res.data);
-      this.setState({ posts: res.data });
+      this.setState({ data: res.data });
     });
   }
 
@@ -42,7 +39,12 @@ class Wall extends React.Component<WallProps, WallState> {
     return (
       <IonPage>
         <IonContent>
-          <Posts data={this.state.posts}></Posts>
+          <Posts
+            id={this.state.data.id}
+            name={this.state.data.name}
+            location={this.state.data.location}
+            posts={this.state.data.posts}
+          ></Posts>
         </IonContent>
       </IonPage>
     );

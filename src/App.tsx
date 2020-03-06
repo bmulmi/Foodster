@@ -29,17 +29,16 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import "./theme/fonts.css";
 
 /* Global CSS */
-import "./global.css";
+// import "./global.css";
 
 const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet id="main">
-          {/* <Route path="/wall/" component={Wall} />
-          <Route path="/maps/" component={Maps} /> */}
           <Route path="/home/:id" component={Home} />
           <Route path="/search/:id" component={Search} />
           <Route path="/login" component={Login} exact={true} />

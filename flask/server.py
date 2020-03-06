@@ -2,32 +2,12 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask import jsonify
 from database import *
+from flask_ngrok import run_with_ngrok
 
 app = Flask("__main__")
 CORS(app)
+# run_with_ngrok(app)
 initialize()
-
-user = {'email': 'hnrs499', 'password': '12345', 'id': '1'}
-dat = [
-    {
-        'id': 1,
-        'name': 'Chinese Restaurant',
-        'location': 'Queens',
-        'description': 'A local chinese restaurant in Queens'
-    },
-    {
-        'id': 2,
-        'name': 'Italian',
-        'location': 'NYC',
-        'description': 'A local Italian restaurant in Manhattan'
-    },
-    {
-        'id': 3,
-        'name': 'Vietnamese',
-        'location': 'Mahwah',
-        'description': 'A local Vietnamese restaurant in Mahwah'
-    }
-]
 
 
 @app.route('/')
@@ -94,6 +74,7 @@ def signup_vendor():
 
 @app.route('/vendorwall/<id>', methods=['GET'])
 def vendorwall_index(id):
+    dat = get_vendor_info(id)
     return (jsonify(dat))
 
 
@@ -116,4 +97,28 @@ def search_vendors():
     return (jsonify(data))
 
 
-app.run(debug=True)
+@app.route('/vendorinfo/<id>', methods=['GET'])
+def vendorpage_index(id):
+    data = get_vendor_info(id)
+    return(jsonify(data))
+
+
+@app.route('/userinfo/<id>', methods=['GET'])
+def userinfo_index(id):
+    data = get_user_info(id)
+    return(jsonify(data))
+
+
+@app.route('/unfollow/<uid>/<vid>', methods=['POST'])
+def unfollow(uid, vid):
+    updated_user = unfollow_vendor(uid, vid)
+    return (jsonify(updated_user))
+
+
+@app.route('/follow/<uid>/<vid>', methods=['POST'])
+def follow(uid, vid):
+    updated_user = follow_vendor(uid, vid)
+    return (jsonify(updated_user))
+
+
+app.run()
