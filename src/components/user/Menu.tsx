@@ -9,12 +9,22 @@ import {
 } from "@ionic/react";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { home, map, restaurant } from "ionicons/icons";
+import {
+  home,
+  map,
+  restaurant,
+  person,
+  bookmark,
+  location,
+  helpBuoy,
+  book,
+  alertCircle,
+  chatbox,
+  settings,
+  language,
+  lockClosed
+} from "ionicons/icons";
 import "./Menu.css";
-
-interface MenuProps extends RouteComponentProps {
-  user_id: string;
-}
 
 interface AppPage {
   url: string;
@@ -25,23 +35,23 @@ interface AppPage {
 const appPages: AppPage[] = [
   {
     title: "Profile",
-    url: "/profile/",
-    iosIcon: home
+    url: "/construction/",
+    iosIcon: person
   },
   {
     title: "Saved",
-    url: "/saved/",
-    iosIcon: map
+    url: "/construction/",
+    iosIcon: bookmark
   },
   {
     title: "Groups",
-    url: "/allvendors/",
+    url: "/construction/",
     iosIcon: restaurant
   },
   {
     title: "Events",
-    url: "/events/",
-    iosIcon: restaurant
+    url: "/construction/",
+    iosIcon: location
   }
 ];
 
@@ -49,22 +59,22 @@ const helpPages: AppPage[] = [
   {
     title: "Help Center",
     url: "/construction/",
-    iosIcon: home
+    iosIcon: helpBuoy
   },
   {
     title: "Help Community",
     url: "/construction/",
-    iosIcon: map
+    iosIcon: chatbox
   },
   {
     title: "Report a Problem",
     url: "/construction/",
-    iosIcon: restaurant
+    iosIcon: alertCircle
   },
   {
     title: "Terms & Policies",
     url: "/construction/",
-    iosIcon: restaurant
+    iosIcon: book
   }
 ];
 
@@ -72,63 +82,82 @@ const settingsPages: AppPage[] = [
   {
     title: "Settings",
     url: "/construction/",
-    iosIcon: home
+    iosIcon: settings
   },
   {
     title: "Language",
     url: "/construction/",
-    iosIcon: map
+    iosIcon: language
   },
   {
     title: "Privacy Shortcuts",
     url: "/construction/",
-    iosIcon: restaurant
+    iosIcon: lockClosed
   }
 ];
 
-const Menu: React.FC<MenuProps> = ({ user_id }) => {
-  console.log("from Menu " + user_id);
-  return (
-    <IonPage>
-      <IonContent>
-        <IonList id="inbox-list">
-          <IonListHeader>General</IonListHeader>
-          {appPages.map((appPage, index) => {
-            return (
-              <IonItem key={index} routerLink={appPage.url + user_id}>
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
-              </IonItem>
-            );
-          })}
-        </IonList>
-        <IonList id="inbox-list">
-          <IonListHeader>Help & Support</IonListHeader>
+export interface MenuProps {
+  match: any;
+}
 
-          {helpPages.map((appPage, index) => {
-            return (
-              <IonItem key={index} routerLink={appPage.url + user_id}>
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
-              </IonItem>
-            );
-          })}
-        </IonList>
-        <IonList id="inbox-list">
-          <IonListHeader>Settings & Privacy</IonListHeader>
+export interface MenuState {}
 
-          {settingsPages.map((appPage, index) => {
-            return (
-              <IonItem key={index} routerLink={appPage.url + user_id}>
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
-              </IonItem>
-            );
-          })}
-        </IonList>
-      </IonContent>
-    </IonPage>
-  );
-};
+class Menu extends React.Component<MenuProps, MenuState> {
+  render() {
+    return (
+      <IonPage>
+        <IonContent>
+          <IonList id="inbox-list">
+            <IonListHeader>General</IonListHeader>
+            {appPages.map((appPage, index) => {
+              return (
+                <IonItem
+                  key={index}
+                  routerLink={appPage.url + this.props.match.params.id}
+                  routerDirection="forward"
+                >
+                  <IonIcon slot="start" icon={appPage.iosIcon} />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              );
+            })}
+          </IonList>
+          <IonList id="inbox-list">
+            <IonListHeader>Help & Support</IonListHeader>
 
-export default withRouter(Menu);
+            {helpPages.map((appPage, index) => {
+              return (
+                <IonItem
+                  key={index}
+                  routerLink={appPage.url + this.props.match.params.id}
+                  routerDirection="forward"
+                >
+                  <IonIcon slot="start" icon={appPage.iosIcon} />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              );
+            })}
+          </IonList>
+          <IonList id="inbox-list">
+            <IonListHeader>Settings & Privacy</IonListHeader>
+
+            {settingsPages.map((appPage, index) => {
+              return (
+                <IonItem
+                  key={index}
+                  routerLink={appPage.url + this.props.match.params.id}
+                  routerDirection="forward"
+                >
+                  <IonIcon slot="start" icon={appPage.iosIcon} />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              );
+            })}
+          </IonList>
+        </IonContent>
+      </IonPage>
+    );
+  }
+}
+
+export default Menu;

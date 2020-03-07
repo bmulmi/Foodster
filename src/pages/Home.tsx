@@ -37,14 +37,8 @@ class Home extends React.Component<HomeProps, HomeState> {
     this.state = {
       user_id: ""
     };
-    this.goToSearch = this.goToSearch.bind(this);
   }
 
-  goToSearch() {
-    let search_url = "/search/" + this.props.match.params.id;
-
-    return <Redirect to={search_url} />;
-  }
   render() {
     let maps_url = "/maps/" + this.props.match.params.id;
     let wall_url = "/wall/" + this.props.match.params.id;
@@ -86,11 +80,11 @@ class Home extends React.Component<HomeProps, HomeState> {
                 <Route path="/wall/:id" component={Wall} />
                 <Route path="/maps/:id" component={Maps} />
                 <Route path="/menu/:id" component={Menu} />
-                {/* <Route
+                <Route
                   path="/home/:id"
                   render={() => <Redirect to={wall_url} />}
                   exact={true}
-                /> */}
+                />
               </IonRouterOutlet>
 
               <IonTabBar slot="top">

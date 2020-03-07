@@ -13,7 +13,7 @@ const Maps: React.FC<RouteComponentProps<{ user_id: string }>> = ({}) => {
   return (
     <IonPage>
       <IonContent>
-        <IonTitle size="large">This is a map</IonTitle>
+        <IonTitle size="large">Map Coming Soon...</IonTitle>
       </IonContent>
     </IonPage>
   );

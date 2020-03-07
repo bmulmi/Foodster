@@ -11,6 +11,7 @@ import Vendorlogin from "./pages/VendorLogin";
 import Vendorsignup from "./pages/VendorSignup";
 import Vendorhome from "./pages/VendorHome";
 import Vendorpage from "./pages/VendorPage";
+import EContainer from "./components/ExploreContainer";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -40,6 +41,7 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet id="main">
           <Route path="/home/:id" component={Home} />
+          <Route path="/construction/:id" component={EContainer} />
           <Route path="/search/:id" component={Search} />
           <Route path="/login" component={Login} exact={true} />
           <Route path="/signup" component={Signup} />
