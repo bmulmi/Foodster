@@ -8,10 +8,14 @@ import {
   IonTextarea,
   IonCard,
   IonCardContent,
-  IonCardTitle
+  IonCardTitle,
+  IonGrid,
+  IonRow,
+  IonCol
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
+import { Route, Redirect } from "react-router";
 import url from "../../server_url";
 
 export interface MakePostProps {
@@ -23,6 +27,7 @@ export interface MakePostState {
   validFrom: number;
   validUntil: number;
   timeStamp: string;
+  status: boolean;
 }
 
 class MakePost extends React.Component<MakePostProps, MakePostState> {
@@ -32,7 +37,8 @@ class MakePost extends React.Component<MakePostProps, MakePostState> {
       description: "",
       validFrom: 0,
       validUntil: 0,
-      timeStamp: ""
+      timeStamp: "",
+      status: false
     };
     this.handleDescription = this.handleDescription.bind(this);
     this.handleValidFrom = this.handleValidFrom.bind(this);
@@ -69,50 +75,70 @@ class MakePost extends React.Component<MakePostProps, MakePostState> {
     axios.post(url + "/vendorpost/" + this.user_id, data).then(res => {
       if (res.data === "failure") {
         //make toast about failure and reload page
+        this.setState({ status: false });
       } else {
         //make toast about success and reload page
+        this.setState({ status: true });
       }
     });
   }
   render() {
-    return (
-      <IonPage>
-        <IonContent>
-          <IonCard>
-            <IonCardContent>
-              <IonCardTitle>Make a post</IonCardTitle>
-              <IonItem>
-                <IonLabel position="floating">Whats it about?</IonLabel>
-                <IonTextarea
-                  rows={4}
-                  onIonInput={this.handleDescription}
-                ></IonTextarea>
-              </IonItem>
-              <IonItem>
-                <IonLabel position="floating">Valid From</IonLabel>
-                <IonDatetime
-                  displayFormat="MM-DD-YYYY"
-                  placeholder="MM-DD-YYYY"
-                  onIonChange={this.handleValidFrom}
-                ></IonDatetime>
-              </IonItem>
+    if (this.state.status) {
+      return (
+        <Route>
+          <Redirect to={`/vendorhome/${this.props.match.params.id}`} />
+        </Route>
+      );
+    } else {
+      return (
+        <IonPage>
+          <IonContent>
+            <IonCard>
+              <IonCardContent>
+                <IonCardTitle className="title-font ion-text-center ion-margin-vertical">
+                  Create Post
+                </IonCardTitle>
+                <IonItem>
+                  <IonLabel position="floating">Whats it about?</IonLabel>
+                  <IonTextarea
+                    rows={4}
+                    onIonInput={this.handleDescription}
+                  ></IonTextarea>
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="floating">Valid From</IonLabel>
+                  <IonDatetime
+                    displayFormat="MM-DD-YYYY"
+                    placeholder="MM-DD-YYYY"
+                    onIonChange={this.handleValidFrom}
+                  ></IonDatetime>
+                </IonItem>
 
-              <IonItem>
-                <IonLabel position="floating">Valid Until</IonLabel>
-                <IonDatetime
-                  displayFormat="MM-DD-YYYY"
-                  placeholder="MM-DD-YYYY"
-                  onIonChange={this.handleValidUntil}
-                ></IonDatetime>
-              </IonItem>
-              <IonItem className="ion-text-center">
-                <IonButton onClick={this.handleSubmit}>Post</IonButton>
-              </IonItem>
-            </IonCardContent>
-          </IonCard>
-        </IonContent>
-      </IonPage>
-    );
+                <IonItem>
+                  <IonLabel position="floating">Valid Until</IonLabel>
+                  <IonDatetime
+                    displayFormat="MM-DD-YYYY"
+                    placeholder="MM-DD-YYYY"
+                    onIonChange={this.handleValidUntil}
+                  ></IonDatetime>
+                </IonItem>
+              </IonCardContent>
+            </IonCard>
+            <IonGrid>
+              <IonRow>
+                <IonCol size="4" />
+                <IonCol
+                  size="4"
+                  className="ion-text-center ion-padding-vertical "
+                >
+                  <IonButton onClick={this.handleSubmit}>Post</IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonContent>
+        </IonPage>
+      );
+    }
   }
 }
 

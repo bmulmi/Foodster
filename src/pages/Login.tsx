@@ -2,7 +2,6 @@ import {
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   IonButton,
   IonInput,
@@ -18,13 +17,17 @@ import React from "react";
 import axios from "axios";
 import url from "../server_url";
 import { Route, Redirect } from "react-router";
-export interface LoginProps {}
+
+export interface LoginProps {
+  match: any;
+}
 
 export interface LoginState {
   success: boolean;
   id: number;
   username: string;
   password: string;
+  loginType: string;
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
@@ -34,11 +37,17 @@ class Login extends React.Component<LoginProps, LoginState> {
       success: false,
       id: 0,
       username: "",
-      password: ""
+      password: "",
+      loginType: ""
     };
     this.handleUsername = this.handleUsername.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    let loginT = this.props.match.params.type;
+    this.setState({ loginType: loginT });
   }
 
   handleUsername(event: any) {
@@ -54,8 +63,10 @@ class Login extends React.Component<LoginProps, LoginState> {
     let data = new FormData();
     data.append("email", this.state.username);
     data.append("password", this.state.password);
+
+    let uri = this.state.loginType == "user" ? "/login" : "/vendorlogin";
     axios
-      .post(url + "/login", data)
+      .post(url + uri, data)
       .then(res => {
         if (res.data === "failure") {
           this.setState({ success: false });
@@ -71,9 +82,10 @@ class Login extends React.Component<LoginProps, LoginState> {
 
   render() {
     if (this.state.success) {
+      let uri = this.state.loginType == "user" ? "/home/" : "/vendorhome/";
       return (
         <Route>
-          <Redirect to={`/home/${this.state.id}`} />
+          <Redirect to={`${uri}${this.state.id}`} />
         </Route>
       );
     } else {
@@ -118,7 +130,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               <IonRow>
                 <IonCol>
                   <IonItem>
-                    <IonLabel position="floating">username</IonLabel>
+                    <IonLabel position="floating">Username</IonLabel>
                     <IonInput
                       type="text"
                       onIonInput={this.handleUsername}
@@ -129,7 +141,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               <IonRow>
                 <IonCol>
                   <IonItem>
-                    <IonLabel position="floating">password</IonLabel>
+                    <IonLabel position="floating">Password</IonLabel>
                     <IonInput
                       type="password"
                       onIonInput={this.handlePassword}
@@ -150,7 +162,7 @@ class Login extends React.Component<LoginProps, LoginState> {
               <IonRow>
                 <IonCol size="4" />
                 <IonCol size="4" className="ion-text-center ion-padding">
-                  <a href="/signup">Sign-up</a>
+                  <a href="/signup/user">Sign-up</a>
                 </IonCol>
                 <IonCol size="4" />
               </IonRow>
@@ -160,14 +172,16 @@ class Login extends React.Component<LoginProps, LoginState> {
             <IonGrid>
               <IonRow>
                 <IonCol size="4">
-                  <IonText className="ion-text-center">
-                    <a href="/vendorlogin">Vendor Login</a>
-                  </IonText>
+                  {this.state.loginType !== "vendor" && (
+                    <IonText className="ion-text-center">
+                      <a href="/login/vendor">Vendor Login</a>
+                    </IonText>
+                  )}
                 </IonCol>
                 <IonCol size="4"></IonCol>
                 <IonCol size="4">
                   <IonText className="ion-text-center">
-                    <a href="/vendorsignup">Vendor Sign-up </a>
+                    <a href="/signup/vendor">Vendor Sign-up </a>
                   </IonText>
                 </IonCol>
               </IonRow>

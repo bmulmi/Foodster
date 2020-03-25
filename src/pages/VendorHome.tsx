@@ -38,11 +38,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>
-              Foodster
-              {/* <IonSearchbar animated></IonSearchbar> */}
-            </IonTitle>
-            <IonIcon slot="end" icon={search} />
+            <p className="toolbar-font ion-padding ion-margin">Foodster</p>
           </IonToolbar>
         </IonHeader>
         <IonContent>

@@ -2,7 +2,6 @@ import {
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   IonButton,
   IonInput,
@@ -12,24 +11,39 @@ import {
   IonCardContent,
   IonDatetime,
   IonCardTitle,
-  IonChip
+  IonChip,
+  IonGrid,
+  IonRow,
+  IonCol
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
 import url from "../server_url";
+import mapboxgl from "mapbox-gl";
 
 import { Route, Redirect } from "react-router";
 
-export interface SignupProps {}
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiYm11bG1pIiwiYSI6ImNrN2t3YTRkbjAxZG0zZXJyaWsyeG0ycnoifQ.B8842nJdR1uhz0lirF_WYQ";
+
+export interface SignupProps {
+  match: any;
+}
 
 export interface SignupState {
   firstName: string;
   lastName: string;
+  name: string;
+  location: string;
+  latitude: string;
+  longitude: string;
   email: string;
   password: string;
   dob: number;
+  description: string;
   success: boolean;
   id: number;
+  stype: string;
 }
 
 class Signup extends React.Component<SignupProps, SignupState> {
@@ -38,20 +52,57 @@ class Signup extends React.Component<SignupProps, SignupState> {
     this.state = {
       firstName: "",
       lastName: "",
+      name: "",
+      location: "",
+      latitude: "0",
+      longitude: "0",
       email: "",
       password: "",
       dob: 0,
+      description: "",
+
       success: false,
-      id: 0
+      id: 0,
+      stype: ""
     };
+    this.handleName = this.handleName.bind(this);
+    this.handleLocation = this.handleLocation.bind(this);
     this.handleFirstName = this.handleFirstName.bind(this);
     this.handleLastName = this.handleLastName.bind(this);
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleDOB = this.handleDOB.bind(this);
+    this.handleDescription = this.handleDescription.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({ stype: this.props.match.params.type });
+  }
+  handleLocation(event: any) {
+    let loc = event.target.value;
+    var uri =
+      "https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/" +
+      encodeURIComponent(loc) +
+      ".json" +
+      "?access_token=" +
+      mapboxgl.accessToken;
+
+    axios.get(uri).then(res =>
+      this.setState({
+        longitude: res.data.features[0].center[0].toString(),
+        latitude: res.data.features[0].center[1].toString(),
+        location: loc
+      })
+    );
+  }
+
+  handleDescription(event: any) {
+    this.setState({ description: event.target.value });
+  }
+  handleName(event: any) {
+    this.setState({ name: event.target.value });
+  }
   handleFirstName(event: any) {
     this.setState({ firstName: event.target.value });
   }
@@ -75,27 +126,40 @@ class Signup extends React.Component<SignupProps, SignupState> {
   handleSubmit(event: any) {
     event.preventDefault();
     let data = new FormData();
-    data.append("firstName", this.state.firstName);
-    data.append("lastName", this.state.lastName);
-    data.append("email", this.state.email);
-    data.append("password", this.state.password);
-    data.append("dob", this.state.dob.toString());
 
+    if (this.state.stype == "vendor") {
+      data.append("name", this.state.name);
+      data.append("location", this.state.location);
+      data.append("latitude", this.state.latitude);
+      data.append("longitude", this.state.longitude);
+      data.append("email", this.state.email);
+      data.append("password", this.state.password);
+      data.append("description", this.state.description);
+    } else {
+      data.append("firstName", this.state.firstName);
+      data.append("lastName", this.state.lastName);
+      data.append("email", this.state.email);
+      data.append("password", this.state.password);
+      data.append("dob", this.state.dob.toString());
+    }
     // console.log(data);
-    axios.post(url + "/signup", data).then(res => {
+
+    let uri = this.state.stype == "user" ? "/signup" : "/vendorsignup";
+    axios.post(url + uri, data).then(res => {
       if (res.data === "failure") {
         this.setState({ success: false });
-        // console.log(res.data);
       } else {
         this.setState({ success: true, id: res.data });
       }
-      // console.log(res.data);
     });
   }
 
   render() {
     if (this.state.success) {
-      let url_id = "/home/" + this.state.id;
+      let url_id =
+        this.state.stype == "user"
+          ? "/home/" + this.state.id
+          : "/vendorhome/" + this.state.id;
       return (
         <Route>
           <Redirect to={url_id}></Redirect>
@@ -106,61 +170,143 @@ class Signup extends React.Component<SignupProps, SignupState> {
         <IonPage>
           <IonHeader>
             <IonToolbar>
-              <IonTitle>Foodster</IonTitle>
+              <p className="toolbar-font ion-text-center">Foodster</p>
             </IonToolbar>
           </IonHeader>
           <IonContent>
-            <IonCard>
-              <IonCardContent className="ion-padding">
-                <IonCardTitle>Sign-up for Foodster</IonCardTitle>
+            {this.state.stype == "user" ? (
+              // -------------------- User Sign up --------------------
 
-                <IonItem>
-                  <IonLabel position="floating">First Name</IonLabel>
-                  <IonInput
-                    type="text"
-                    onIonInput={this.handleFirstName}
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Last Name</IonLabel>
-                  <IonInput
-                    type="text"
-                    onIonInput={this.handleLastName}
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">E-mail</IonLabel>
-                  <IonInput
-                    type="email"
-                    onIonInput={this.handleEmail}
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Password</IonLabel>
-                  <IonInput
-                    type="password"
-                    onIonInput={this.handlePassword}
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Birth Date</IonLabel>
-                  <IonDatetime
-                    displayFormat="MM-DD-YYYY"
-                    placeholder="MM-DD-YYYY"
-                    onIonChange={this.handleDOB}
-                  ></IonDatetime>
-                </IonItem>
-                <IonItem>
-                  <IonChip>
-                    <IonLabel>Upload a Profile Picture</IonLabel>
-                  </IonChip>
-                </IonItem>
-              </IonCardContent>
+              <IonCard>
+                <IonCardContent className="ion-padding">
+                  <IonCardTitle className="title-font ion-text-center ion-margin-vertical">
+                    User Sign-up
+                  </IonCardTitle>
 
-              <IonItem>
-                <IonButton onClick={this.handleSubmit}>Sign-up</IonButton>
-              </IonItem>
-            </IonCard>
+                  <IonItem>
+                    <IonLabel position="floating">First Name</IonLabel>
+                    <IonInput
+                      type="text"
+                      onIonInput={this.handleFirstName}
+                    ></IonInput>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="floating">Last Name</IonLabel>
+                    <IonInput
+                      type="text"
+                      onIonInput={this.handleLastName}
+                    ></IonInput>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="floating">E-mail</IonLabel>
+                    <IonInput
+                      type="email"
+                      onIonInput={this.handleEmail}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="floating">Password</IonLabel>
+                    <IonInput
+                      type="password"
+                      onIonInput={this.handlePassword}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="floating">Birth Date</IonLabel>
+                    <IonDatetime
+                      displayFormat="MM-DD-YYYY"
+                      placeholder="MM-DD-YYYY"
+                      onIonChange={this.handleDOB}
+                    ></IonDatetime>
+                  </IonItem>
+                  <IonItem>
+                    <IonGrid>
+                      <IonRow>
+                        <IonCol size="2" />
+                        <IonCol size="4">
+                          <IonChip>
+                            <IonLabel>Upload a Profile Picture</IonLabel>
+                          </IonChip>
+                        </IonCol>
+                        <IonCol size="4" />
+                      </IonRow>
+                    </IonGrid>
+                  </IonItem>
+                </IonCardContent>
+              </IonCard>
+            ) : (
+              // -------------------- Vendor Sign up --------------------
+              <IonCard>
+                <IonCardContent className="ion-padding">
+                  <IonCardTitle className="title-font ion-text-center ion-margin-vertical">
+                    Vendor Sign-up
+                  </IonCardTitle>
+
+                  <IonItem>
+                    <IonLabel position="floating">Name</IonLabel>
+                    <IonInput
+                      type="text"
+                      onIonInput={this.handleName}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="floating">Location</IonLabel>
+                    <IonInput
+                      type="text"
+                      onIonInput={this.handleLocation}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="floating">E-mail</IonLabel>
+                    <IonInput
+                      type="email"
+                      onIonInput={this.handleEmail}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="floating">Password</IonLabel>
+                    <IonInput
+                      type="password"
+                      onIonInput={this.handlePassword}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel position="floating">Description</IonLabel>
+                    <IonInput
+                      type="text"
+                      onIonInput={this.handleDescription}
+                    ></IonInput>
+                  </IonItem>
+                  <IonItem>
+                    <IonGrid>
+                      <IonRow>
+                        <IonCol size="2" />
+                        <IonCol size="4">
+                          <IonChip>
+                            <IonLabel>Upload a Profile Picture</IonLabel>
+                          </IonChip>
+                        </IonCol>
+                        <IonCol size="4" />
+                      </IonRow>
+                    </IonGrid>
+                  </IonItem>
+                </IonCardContent>
+              </IonCard>
+            )}
+
+            <IonGrid>
+              <IonRow>
+                <IonCol size="4" />
+                <IonCol
+                  size="4"
+                  className="ion-text-center ion-padding-vertical ion-margin-vertical"
+                >
+                  <IonButton onClick={this.handleSubmit}>Sign-up</IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
           </IonContent>
         </IonPage>
       );

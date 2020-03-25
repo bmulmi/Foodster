@@ -11,17 +11,19 @@ import {
   IonToolbar,
   IonPage,
   IonButton,
+  IonButtons,
   IonGrid
 } from "@ionic/react";
 import { home, map, options, search } from "ionicons/icons";
 
 import React from "react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 import "./Home.css";
 import Wall from "../components/user/Wall";
 import Maps from "../components/user/Maps";
 import Menu from "../components/user/Menu";
+// import EContainer from "../components/ExploreContainer";
 
 export interface HomeProps {
   match: any;
@@ -57,17 +59,20 @@ class Home extends React.Component<HomeProps, HomeState> {
                   </p>
                 </IonCol>
                 <IonCol size="2" className="ion-padding-top">
-                  <IonButton
-                    className="ion-margin-verticle"
-                    color="primary"
-                    fill="solid"
-                    size="small"
-                    shape="round"
-                    routerLink={search_url}
-                    routerDirection="forward"
-                  >
-                    <IonIcon slot="icon-only" icon={search} />
-                  </IonButton>
+                  <IonButtons>
+                    <IonButton
+                      className="ion-margin-verticle"
+                      color="primary"
+                      fill="solid"
+                      size="small"
+                      shape="round"
+                      routerLink={search_url}
+                      routerDirection="forward"
+                      onClick={() => console.log("clicked")}
+                    >
+                      <IonIcon slot="icon-only" icon={search} />
+                    </IonButton>
+                  </IonButtons>
                 </IonCol>
               </IonRow>
             </IonGrid>
@@ -80,11 +85,12 @@ class Home extends React.Component<HomeProps, HomeState> {
                 <Route path="/wall/:id" component={Wall} />
                 <Route path="/maps/:id" component={Maps} />
                 <Route path="/menu/:id" component={Menu} />
-                <Route
+
+                {/* <Route
                   path="/home/:id"
                   render={() => <Redirect to={wall_url} />}
                   exact={true}
-                />
+                /> */}
               </IonRouterOutlet>
 
               <IonTabBar slot="top">

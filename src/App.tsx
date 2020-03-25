@@ -4,11 +4,11 @@ import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
 import Search from "./components/user/Search";
-
+// import Wall from "./components/user/Wall";
+// import Maps from "./components/user/Maps";
+// import Menu from "./components/user/Menu";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Vendorlogin from "./pages/VendorLogin";
-import Vendorsignup from "./pages/VendorSignup";
 import Vendorhome from "./pages/VendorHome";
 import Vendorpage from "./pages/VendorPage";
 import EContainer from "./components/ExploreContainer";
@@ -40,17 +40,16 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet id="main">
+          <Route path="/login/:type" component={Login} exact={true} />
+          <Route path="/signup/:type" component={Signup} />
           <Route path="/home/:id" component={Home} />
-          <Route path="/construction/:id" component={EContainer} />
-          <Route path="/search/:id" component={Search} />
-          <Route path="/login" component={Login} exact={true} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/vendorsignup" component={Vendorsignup} />
-          <Route path="/vendorlogin" component={Vendorlogin} />
           <Route path="/vendorhome/:id" component={Vendorhome} />
+
+          <Route path="/search/:id" component={Search} />
+          <Route path="/construction/:id" component={EContainer} />
           <Route path="/vendorpage/:vid/:uid" component={Vendorpage} />
 
-          <Route exact path="/" render={() => <Redirect to="/login" />} />
+          <Route exact path="/" render={() => <Redirect to="/login/user" />} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

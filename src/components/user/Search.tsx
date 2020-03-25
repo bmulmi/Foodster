@@ -68,7 +68,7 @@ class Search extends React.Component<SearchProps, SearchState> {
           <IonToolbar>
             <IonButtons slot="start">
               <IonBackButton
-                defaultHref={`${url}/home/${this.props.match.params.id}`}
+                defaultHref={`/home/${this.props.match.params.id}`}
               />
             </IonButtons>
             <IonSearchbar

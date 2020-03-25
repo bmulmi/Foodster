@@ -8,10 +8,7 @@ import {
   IonListHeader
 } from "@ionic/react";
 import React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 import {
-  home,
-  map,
   restaurant,
   person,
   bookmark,
@@ -25,7 +22,6 @@ import {
   lockClosed
 } from "ionicons/icons";
 import "./Menu.css";
-
 interface AppPage {
   url: string;
   iosIcon: string;
@@ -124,7 +120,6 @@ class Menu extends React.Component<MenuProps, MenuState> {
           </IonList>
           <IonList id="inbox-list">
             <IonListHeader>Help & Support</IonListHeader>
-
             {helpPages.map((appPage, index) => {
               return (
                 <IonItem
@@ -138,9 +133,9 @@ class Menu extends React.Component<MenuProps, MenuState> {
               );
             })}
           </IonList>
+
           <IonList id="inbox-list">
             <IonListHeader>Settings & Privacy</IonListHeader>
-
             {settingsPages.map((appPage, index) => {
               return (
                 <IonItem
