@@ -11,12 +11,14 @@ import {
   IonGrid,
   IonCol,
   IonText,
-  IonFooter
+  IonFooter,
+  IonSpinner
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
 import url from "../server_url";
 import { Route, Redirect } from "react-router";
+import { app } from "../base";
 
 export interface LoginProps {
   match: any;
@@ -28,6 +30,9 @@ export interface LoginState {
   username: string;
   password: string;
   loginType: string;
+  displayError: boolean;
+  errorMsg: string;
+  loading: boolean;
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
@@ -38,16 +43,28 @@ class Login extends React.Component<LoginProps, LoginState> {
       id: 0,
       username: "",
       password: "",
-      loginType: ""
+      loginType: "",
+      displayError: false,
+      errorMsg: "",
+      loading: false
     };
     this.handleUsername = this.handleUsername.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.logUserIn = this.logUserIn.bind(this);
   }
 
   componentDidMount() {
     let loginT = this.props.match.params.type;
     this.setState({ loginType: loginT });
+
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("SIGNED IN: " + user.email);
+      } else {
+        console.log("No user is logged in");
+      }
+    });
   }
 
   handleUsername(event: any) {
@@ -59,25 +76,40 @@ class Login extends React.Component<LoginProps, LoginState> {
   }
 
   handleSubmit(event: any) {
+    this.setState({ loading: true });
     event.preventDefault();
+    app
+      .auth()
+      .signInWithEmailAndPassword(this.state.username, this.state.password)
+      .then(() => this.logUserIn())
+      .catch(error => {
+        console.log(error.message);
+        this.setState({
+          success: false,
+          displayError: true,
+          loading: false,
+          errorMsg: error.message.toString()
+        });
+      });
+  }
+
+  logUserIn() {
     let data = new FormData();
     data.append("email", this.state.username);
-    data.append("password", this.state.password);
-
     let uri = this.state.loginType == "user" ? "/login" : "/vendorlogin";
-    axios
-      .post(url + uri, data)
-      .then(res => {
-        if (res.data === "failure") {
-          this.setState({ success: false });
-        } else {
-          this.setState({ success: true, id: res.data });
-        }
-        // console.log(res.data);
-      })
-      .catch(res => {
-        // console.log(res);
-      });
+
+    axios.post(url + uri, data).then(res => {
+      if (res.data === "failure") {
+        this.setState({
+          success: false,
+          loading: false,
+          displayError: true,
+          errorMsg: "Invalid User: Please log in as Vendor"
+        });
+      } else {
+        this.setState({ success: true, id: res.data, displayError: false });
+      }
+    });
   }
 
   render() {
@@ -102,7 +134,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                 <IonCol />{" "}
               </IonRow>
               <IonRow>
-                <IonCol />{" "}
+                <IonCol />
               </IonRow>
               <IonRow>
                 <IonCol />{" "}
@@ -120,9 +152,26 @@ class Login extends React.Component<LoginProps, LoginState> {
                   </IonItem>
                 </IonCol>
               </IonRow>
-
+              {this.state.loginType === "vendor" && (
+                <IonRow>
+                  <IonCol>
+                    <IonItem
+                      lines="none"
+                      className="subtitle-font ion-text-center ion-margin-vertical"
+                    >
+                      <IonLabel>Vendor Login</IonLabel>
+                    </IonItem>
+                  </IonCol>
+                </IonRow>
+              )}
               <IonRow>
-                <IonCol />{" "}
+                {this.state.displayError && (
+                  <IonCol>
+                    <IonItem lines="none" className="ion-text-center">
+                      <IonText color="warning">{this.state.errorMsg}</IonText>
+                    </IonItem>
+                  </IonCol>
+                )}
               </IonRow>
               <IonRow>
                 <IonCol />{" "}
@@ -149,16 +198,29 @@ class Login extends React.Component<LoginProps, LoginState> {
                   </IonItem>
                 </IonCol>
               </IonRow>
-              <IonRow>
-                <IonCol size="4" />
-                <IonCol
-                  size="4"
-                  className="ion-text-center ion-padding-vertical ion-margin-vertical"
-                >
-                  <IonButton onClick={this.handleSubmit}>Login</IonButton>
-                </IonCol>
-                <IonCol size="4" />
-              </IonRow>
+              {this.state.loading ? (
+                <IonRow>
+                  <IonCol size="4" />
+                  <IonCol
+                    size="4"
+                    className="ion-text-center ion-padding-vertical ion-margin-vertical"
+                  >
+                    <IonSpinner name="circles" />{" "}
+                  </IonCol>
+                  <IonCol size="4" />
+                </IonRow>
+              ) : (
+                <IonRow>
+                  <IonCol size="4" />
+                  <IonCol
+                    size="4"
+                    className="ion-text-center ion-padding-vertical ion-margin-vertical"
+                  >
+                    <IonButton onClick={this.handleSubmit}>Login</IonButton>
+                  </IonCol>
+                  <IonCol size="4" />
+                </IonRow>
+              )}
               <IonRow>
                 <IonCol size="4" />
                 <IonCol size="4" className="ion-text-center ion-padding">

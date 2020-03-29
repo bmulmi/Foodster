@@ -20,10 +20,12 @@ import {
   IonItemDivider
 } from "@ionic/react";
 import { close, checkmark } from "ionicons/icons";
+import { Redirect } from "react-router-dom";
 
 import url from "../server_url";
 import axios from "axios";
 import Posts from "../components/vendor/Posts";
+import { app } from "../base";
 
 export interface VendorPageProps {
   match: any;
@@ -32,6 +34,7 @@ export interface VendorPageProps {
 export interface VendorPageState {
   vendorData: any;
   userData: any;
+  authenticated: boolean;
   isFollowing: boolean;
 }
 
@@ -41,9 +44,24 @@ class VendorPage extends React.Component<VendorPageProps, VendorPageState> {
     this.state = {
       vendorData: [],
       userData: [],
-      isFollowing: false
+      isFollowing: false,
+      authenticated: true
     };
     this.handleFollowClick = this.handleFollowClick.bind(this);
+  }
+
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authenticated: true
+        });
+      } else {
+        this.setState({
+          authenticated: false
+        });
+      }
+    });
   }
 
   componentDidMount() {
@@ -90,13 +108,16 @@ class VendorPage extends React.Component<VendorPageProps, VendorPageState> {
     }
   }
   render() {
+    if (this.state.authenticated === false) {
+      return <Redirect to="/" />;
+    }
     return (
       <IonPage>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
               <IonBackButton
-                defaultHref={`${url}/home/${this.props.match.params.uid}`}
+                defaultHref={`/home/${this.props.match.params.uid}`}
               />
             </IonButtons>
             <IonTitle>{this.state.vendorData.name}</IonTitle>

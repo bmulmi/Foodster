@@ -12,6 +12,8 @@ import {
 } from "@ionic/react";
 import SearchItem from "./SearchItem";
 import url from "../../server_url";
+import { app } from "../../base";
+import { Redirect } from "react-router-dom";
 
 export interface SearchProps {
   match: any;
@@ -19,22 +21,42 @@ export interface SearchProps {
 
 export interface SearchState {
   vendorList: any;
+  constantList: any;
+  authenticated: boolean;
 }
 
 class Search extends React.Component<SearchProps, SearchState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      vendorList: []
+      vendorList: [],
+      constantList: [],
+      authenticated: true
     };
     this.handleInput = this.handleInput.bind(this);
     this.resetValues = this.resetValues.bind(this);
   }
 
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("SIGNED IN: " + user.email);
+        this.setState({
+          authenticated: true
+        });
+      } else {
+        console.log("SIGNED OUT");
+        this.setState({
+          authenticated: false
+        });
+      }
+    });
+  }
+
   componentDidMount() {
     axios.get(url + "/search").then(res => {
       console.log("Data recieved:" + res.data);
-      this.setState({ vendorList: res.data });
+      this.setState({ vendorList: res.data, constantList: res.data });
     });
   }
 
@@ -51,17 +73,24 @@ class Search extends React.Component<SearchProps, SearchState> {
         return filtered.includes(filter);
       });
     } else {
-      newList = this.state.vendorList;
+      newList = this.state.constantList;
     }
 
     this.setState({ vendorList: newList });
   }
 
   resetValues(event: any) {
-    this.componentDidMount();
+    axios.get(url + "/search").then(res => {
+      console.log("Data recieved:" + res.data);
+      this.setState({ vendorList: res.data });
+    });
   }
 
   render() {
+    if (this.state.authenticated === false) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <IonPage>
         <IonHeader>

@@ -19,20 +19,48 @@ import "./Home.css";
 import Wall from "../components/vendor/Wall";
 import MakePost from "../components/vendor/MakePost";
 import Menu from "../components/vendor/Menu";
+import { app } from "../base";
 
 export interface HomeProps {
   match: any;
 }
 
-export interface HomeState {}
+export interface HomeState {
+  authenticated: boolean;
+}
 
 class Home extends React.Component<HomeProps, HomeState> {
-  user_id = this.props.match.params.id;
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      authenticated: true
+    };
+  }
+
+  componentWillMount() {
+    app.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("SIGNED IN: " + user.email);
+        this.setState({
+          authenticated: true
+        });
+      } else {
+        console.log("SIGNED OUT");
+        this.setState({
+          authenticated: false
+        });
+      }
+    });
+  }
 
   render() {
-    let new_post = "/newpost/" + this.user_id;
-    let wall_url = "/vendorwall/" + this.user_id;
-    let menu_url = "/vendormenu/" + this.user_id;
+    if (this.state.authenticated === false) {
+      return <Redirect to="/" />;
+    }
+
+    let new_post = "/newpost/" + this.props.match.params.id;
+    let wall_url = "/vendorwall/" + this.props.match.params.id;
+    let menu_url = "/vendormenu/" + this.props.match.params.id;
 
     return (
       <IonPage>
@@ -48,11 +76,11 @@ class Home extends React.Component<HomeProps, HomeState> {
                 <Route path="/vendorwall/:id" component={Wall} />
                 <Route path="/newpost/:id" component={MakePost} />
                 <Route path="/vendormenu/:id" component={Menu} />
-                {/* <Route
+                <Route
                   path="/vendorhome/:id"
                   render={() => <Redirect to={wall_url} />}
                   exact={true}
-                /> */}
+                />
               </IonRouterOutlet>
 
               <IonTabBar slot="top">

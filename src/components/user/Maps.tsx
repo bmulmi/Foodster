@@ -14,67 +14,85 @@ export interface MapsProps {
 
 export interface MapsState {
   vendors: any;
+  currLat: number;
+  currLon: number;
 }
 
 class Maps extends React.Component<MapsProps, MapsState> {
   mapContainer = React.createRef<any>();
   map: any;
 
-  constructor(props: any) {
+  constructor(props: any, private geolocation: Geolocation) {
     super(props);
     this.state = {
-      vendors: []
+      vendors: [],
+      currLat: 0,
+      currLon: 0
     };
-    this.search = this.search.bind(this);
     this.loadPopups = this.loadPopups.bind(this);
   }
 
   componentDidMount() {
+    var geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      trackUserLocation: true
+    });
+
+    geolocate.on("geolocate", (e: any) => {
+      this.setState({
+        currLon: e.coords.longitude,
+        currLat: e.coords.latitude
+      });
+    });
+
     this.map = new mapboxgl.Map({
       container: this.mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [-74.177022, 41.081136],
-      zoom: 10
+      zoom: 11
     });
 
+    this.map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      })
+    );
     this.loadPopups();
   }
 
   loadPopups = async () => {
+    // get all the vendors
     let res = await axios.get(url + "/search");
+
+    // set all the necessary variables
     let temp = res.data;
-    let coordinates = new Array(temp.length - 1);
     let marker = new Array(temp.length - 1);
     let popup = new Array(temp.length - 1);
+
+    // set up popups and markers
     for (var i = 0; i < temp.length; i++) {
-      // console.log(temp[i].name);
-      // console.log(temp[i].longitude + "," + temp[i].latitude);
-      coordinates[i] = {
-        longitude: temp[i].longitude,
-        latitude: temp[i].latitude
-      };
-      popup[i] = new mapboxgl.Popup().setText(temp[i].name).on("click", () => {
-        console.log(temp[i].id);
-      });
+      popup[i] = new mapboxgl.Popup({
+        closeOnClick: false,
+        closeButton: false
+      }).setHTML(
+        '<a href="' +
+          `/vendorpage/${temp[i].id}/${this.props.match.params.id}` +
+          '">' +
+          temp[i].name +
+          "</a>"
+      );
       marker[i] = new mapboxgl.Marker()
         .setPopup(popup[i])
         .setLngLat([temp[i].longitude, temp[i].latitude])
-        .addTo(this.map);
+        .addTo(this.map)
+        .togglePopup();
     }
   };
-
-  search(query: string) {
-    var uri =
-      "https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/" +
-      encodeURIComponent(query) +
-      ".json" +
-      "?access_token=" +
-      mapboxgl.accessToken;
-
-    axios
-      .get(uri)
-      .then(res => console.log(query + " ---> " + res.data.features[0].center));
-  }
 
   render() {
     return (

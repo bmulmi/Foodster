@@ -19,9 +19,12 @@ import {
   chatbox,
   settings,
   language,
+  logOut,
   lockClosed
 } from "ionicons/icons";
+import { app } from "../../base";
 import "./Menu.css";
+import { Redirect } from "react-router";
 interface AppPage {
   url: string;
   iosIcon: string;
@@ -96,10 +99,31 @@ export interface MenuProps {
   match: any;
 }
 
-export interface MenuState {}
+export interface MenuState {
+  redirect: boolean;
+}
 
 class Menu extends React.Component<MenuProps, MenuState> {
+  constructor(props: any) {
+    super(props);
+    this.state = { redirect: false };
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout() {
+    app
+      .auth()
+      .signOut()
+      .then(user => {
+        this.setState({ redirect: true });
+      });
+  }
+
   render() {
+    if (this.state.redirect === true) {
+      return <Redirect to="/" from="/menu" />;
+    }
+
     return (
       <IonPage>
         <IonContent>
@@ -109,7 +133,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
               return (
                 <IonItem
                   key={index}
-                  routerLink={appPage.url + this.props.match.params.id}
+                  href={appPage.url + this.props.match.params.id}
                   routerDirection="forward"
                 >
                   <IonIcon slot="start" icon={appPage.iosIcon} />
@@ -124,7 +148,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
               return (
                 <IonItem
                   key={index}
-                  routerLink={appPage.url + this.props.match.params.id}
+                  href={appPage.url + this.props.match.params.id}
                   routerDirection="forward"
                 >
                   <IonIcon slot="start" icon={appPage.iosIcon} />
@@ -140,7 +164,8 @@ class Menu extends React.Component<MenuProps, MenuState> {
               return (
                 <IonItem
                   key={index}
-                  routerLink={appPage.url + this.props.match.params.id}
+                  button
+                  href={appPage.url + this.props.match.params.id}
                   routerDirection="forward"
                 >
                   <IonIcon slot="start" icon={appPage.iosIcon} />
@@ -148,6 +173,10 @@ class Menu extends React.Component<MenuProps, MenuState> {
                 </IonItem>
               );
             })}
+            <IonItem button onClick={this.handleLogout}>
+              <IonIcon slot="start" icon={logOut} />
+              <IonLabel>Logout</IonLabel>
+            </IonItem>
           </IonList>
         </IonContent>
       </IonPage>

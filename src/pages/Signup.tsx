@@ -8,6 +8,7 @@ import {
   IonItem,
   IonLabel,
   IonCard,
+  IonText,
   IonCardContent,
   IonDatetime,
   IonCardTitle,
@@ -20,6 +21,7 @@ import React from "react";
 import axios from "axios";
 import url from "../server_url";
 import mapboxgl from "mapbox-gl";
+import { app } from "../base";
 
 import { Route, Redirect } from "react-router";
 
@@ -44,6 +46,8 @@ export interface SignupState {
   success: boolean;
   id: number;
   stype: string;
+  displayError: boolean;
+  errorMsg: string;
 }
 
 class Signup extends React.Component<SignupProps, SignupState> {
@@ -63,7 +67,10 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
       success: false,
       id: 0,
-      stype: ""
+      stype: "",
+
+      displayError: false,
+      errorMsg: ""
     };
     this.handleName = this.handleName.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
@@ -74,11 +81,13 @@ class Signup extends React.Component<SignupProps, SignupState> {
     this.handleDOB = this.handleDOB.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.logUserIn = this.logUserIn.bind(this);
   }
 
   componentDidMount() {
     this.setState({ stype: this.props.match.params.type });
   }
+
   handleLocation(event: any) {
     let loc = event.target.value;
     var uri =
@@ -125,6 +134,24 @@ class Signup extends React.Component<SignupProps, SignupState> {
 
   handleSubmit(event: any) {
     event.preventDefault();
+    app
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password);
+    app
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => this.logUserIn())
+      .catch(error => {
+        console.log(error.message);
+        this.setState({
+          success: false,
+          displayError: true,
+          errorMsg: error.message.toString()
+        });
+      });
+  }
+
+  logUserIn() {
     let data = new FormData();
 
     if (this.state.stype == "vendor") {
@@ -133,27 +160,22 @@ class Signup extends React.Component<SignupProps, SignupState> {
       data.append("latitude", this.state.latitude);
       data.append("longitude", this.state.longitude);
       data.append("email", this.state.email);
-      data.append("password", this.state.password);
+      // data.append("password", this.state.password);
       data.append("description", this.state.description);
     } else {
       data.append("firstName", this.state.firstName);
       data.append("lastName", this.state.lastName);
       data.append("email", this.state.email);
-      data.append("password", this.state.password);
+      // data.append("password", this.state.password);
       data.append("dob", this.state.dob.toString());
     }
     // console.log(data);
 
     let uri = this.state.stype == "user" ? "/signup" : "/vendorsignup";
     axios.post(url + uri, data).then(res => {
-      if (res.data === "failure") {
-        this.setState({ success: false });
-      } else {
-        this.setState({ success: true, id: res.data });
-      }
+      this.setState({ success: true, id: res.data });
     });
   }
-
   render() {
     if (this.state.success) {
       let url_id =
@@ -297,6 +319,15 @@ class Signup extends React.Component<SignupProps, SignupState> {
             )}
 
             <IonGrid>
+              <IonRow>
+                {this.state.displayError && (
+                  <IonCol>
+                    <IonItem lines="none" className="ion-text-center">
+                      <IonText color="warning">{this.state.errorMsg}</IonText>
+                    </IonItem>
+                  </IonCol>
+                )}
+              </IonRow>
               <IonRow>
                 <IonCol size="4" />
                 <IonCol
