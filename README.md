@@ -1,20 +1,4 @@
 # Foodster
-Ramapo College of New Jersey
-Honors Senior Project
-School of Theoretical and Applied Science
-
-Foodster
-A platform for small food businesses to share their content to the world
-
-Designed and Developed by Bibhash Mulmi
-Faculty Sponsor: Dr. Scott E. Frees
-Faculty Readers: Dr. Benjamin Fine
-
-Abstract 
-	This paper summarizes an Honors Senior Project on the research and development of a cross-platform mobile application. This application has two main User Interfaces, one for users, and another for vendors (restaurants). The user-end enables users to follow restaurants of their choice to stay updated on the deals and coupons they offer. It allows them to search the restaurants by their name and also locate nearby restaurants on a map. The vendor-end allows restaurant owners to create posts of their deals and coupons that are shared with all its followers. 
-	This report explains the technologies used in the development of this project. It also discusses the structure of the application and its workflow
- 
-Introduction
 As smartphones have progressed exponentially in the recent decade, the need for innovative mobile applications is essential now more than ever. Computer Scientists have developed a wide range of platforms and system architectures to simplify the development of mobile applications while making them more robust. These developments create a need for a new depth of knowledge that developers must understand and learn. There are numerous programming languages, various modules and libraries, and plenty of platforms to develop a mobile web application. I wanted to learn those libraries, modules, and frameworks that would help me develop a cross-platform mobile application that can run on any device. 
 I came up with the idea of Foodster because it encompassed all my areas of interest and all the skills I wanted to learn while working on this project. I wanted to learn to use geo-location to target nearby users for restaurants to advertise themselves. It was in my interest to implement the feature of users following restaurants and receiving their updates on deals and coupons via posts on their home page. I desired to develop a prototype of a large-scale application to learn the perks of systems architecture and design. 
 Technology Stack
