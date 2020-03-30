@@ -1,8 +1,14 @@
-import { IonContent, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonPage,
+  IonRefresher,
+  IonRefresherContent
+} from "@ionic/react";
 import React from "react";
 import axios from "axios";
 import Posts from "./Posts";
 import url from "../../server_url";
+import { RefresherEventDetail } from "@ionic/core";
 
 export interface WallProps {
   match: any;
@@ -18,6 +24,7 @@ class Wall extends React.Component<WallProps, WallState> {
     this.state = {
       data: []
     };
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
@@ -29,10 +36,20 @@ class Wall extends React.Component<WallProps, WallState> {
     });
   }
 
+  refresh(event: CustomEvent<RefresherEventDetail>) {
+    axios.get(url + "/vendorwall/" + this.props.match.params.id).then(res => {
+      this.setState({ data: res.data });
+      event.detail.complete();
+    });
+  }
+
   render() {
     return (
       <IonPage>
         <IonContent>
+          <IonRefresher slot="fixed" onIonRefresh={this.refresh}>
+            <IonRefresherContent refreshingSpinner="circles" />
+          </IonRefresher>
           <Posts
             id={this.state.data.id}
             name={this.state.data.name}

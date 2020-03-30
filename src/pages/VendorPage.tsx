@@ -9,6 +9,7 @@ import {
   IonTitle,
   IonItem,
   IonButton,
+  IonText,
   IonLabel,
   IonImg,
   IonItemGroup,
@@ -132,10 +133,10 @@ class VendorPage extends React.Component<VendorPageProps, VendorPageState> {
                 {this.state.vendorData.location}
               </IonCardSubtitle>
             </div>
-            <IonItem lines="none">
-              <IonLabel className="ion-text-center subtitle-font">
+            <IonItem lines="none" className="ion-text-center">
+              <IonText className="subtitle-font">
                 {this.state.vendorData.description}
-              </IonLabel>
+              </IonText>
             </IonItem>
             <IonItem lines="full" className="ion-text-center">
               <IonGrid>

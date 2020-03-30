@@ -11,11 +11,11 @@ import {
   IonCardTitle,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  IonToast
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
-import { Route, Redirect } from "react-router";
 import url from "../../server_url";
 
 export interface MakePostProps {
@@ -83,62 +83,59 @@ class MakePost extends React.Component<MakePostProps, MakePostState> {
     });
   }
   render() {
-    if (this.state.status) {
-      return (
-        <Route>
-          <Redirect to={`/vendorhome/${this.props.match.params.id}`} />
-        </Route>
-      );
-    } else {
-      return (
-        <IonPage>
-          <IonContent>
-            <IonCard>
-              <IonCardContent>
-                <IonCardTitle className="title-font ion-text-center ion-margin-vertical">
-                  Create Post
-                </IonCardTitle>
-                <IonItem>
-                  <IonLabel position="floating">Whats it about?</IonLabel>
-                  <IonTextarea
-                    rows={4}
-                    onIonInput={this.handleDescription}
-                  ></IonTextarea>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Valid From</IonLabel>
-                  <IonDatetime
-                    displayFormat="MM-DD-YYYY"
-                    placeholder="MM-DD-YYYY"
-                    onIonChange={this.handleValidFrom}
-                  ></IonDatetime>
-                </IonItem>
+    return (
+      <IonPage>
+        <IonContent>
+          <IonCard>
+            <IonCardContent>
+              <IonCardTitle className="title-font ion-text-center ion-margin-vertical">
+                Create Post
+              </IonCardTitle>
+              <IonItem>
+                <IonLabel position="floating">Whats it about?</IonLabel>
+                <IonTextarea
+                  rows={4}
+                  onIonInput={this.handleDescription}
+                ></IonTextarea>
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Valid From</IonLabel>
+                <IonDatetime
+                  displayFormat="MM-DD-YYYY"
+                  placeholder="MM-DD-YYYY"
+                  onIonChange={this.handleValidFrom}
+                ></IonDatetime>
+              </IonItem>
 
-                <IonItem>
-                  <IonLabel position="floating">Valid Until</IonLabel>
-                  <IonDatetime
-                    displayFormat="MM-DD-YYYY"
-                    placeholder="MM-DD-YYYY"
-                    onIonChange={this.handleValidUntil}
-                  ></IonDatetime>
-                </IonItem>
-              </IonCardContent>
-            </IonCard>
-            <IonGrid>
-              <IonRow>
-                <IonCol size="4" />
-                <IonCol
-                  size="4"
-                  className="ion-text-center ion-padding-vertical "
-                >
-                  <IonButton onClick={this.handleSubmit}>Post</IonButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonContent>
-        </IonPage>
-      );
-    }
+              <IonItem>
+                <IonLabel position="floating">Valid Until</IonLabel>
+                <IonDatetime
+                  displayFormat="MM-DD-YYYY"
+                  placeholder="MM-DD-YYYY"
+                  onIonChange={this.handleValidUntil}
+                ></IonDatetime>
+              </IonItem>
+            </IonCardContent>
+          </IonCard>
+          <IonGrid>
+            <IonRow>
+              <IonCol size="4" />
+              <IonCol
+                size="4"
+                className="ion-text-center ion-padding-vertical "
+              >
+                <IonButton onClick={this.handleSubmit}>Post</IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+          <IonToast
+            isOpen={this.state.status}
+            message="Posted"
+            position="bottom"
+          />
+        </IonContent>
+      </IonPage>
+    );
   }
 }
 

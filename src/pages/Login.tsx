@@ -150,20 +150,17 @@ class Login extends React.Component<LoginProps, LoginState> {
                       <h1> Welcome to Foodster!</h1>
                     </IonLabel>
                   </IonItem>
-                </IonCol>
-              </IonRow>
-              {this.state.loginType === "vendor" && (
-                <IonRow>
-                  <IonCol>
+                  {this.state.loginType === "vendor" && (
                     <IonItem
                       lines="none"
                       className="subtitle-font ion-text-center ion-margin-vertical"
                     >
                       <IonLabel>Vendor Login</IonLabel>
                     </IonItem>
-                  </IonCol>
-                </IonRow>
-              )}
+                  )}
+                </IonCol>
+              </IonRow>
+
               <IonRow>
                 {this.state.displayError && (
                   <IonCol>

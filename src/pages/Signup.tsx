@@ -15,7 +15,8 @@ import {
   IonChip,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  IonTextarea
 } from "@ionic/react";
 import React from "react";
 import axios from "axios";
@@ -296,10 +297,10 @@ class Signup extends React.Component<SignupProps, SignupState> {
                   </IonItem>
                   <IonItem>
                     <IonLabel position="floating">Description</IonLabel>
-                    <IonInput
-                      type="text"
+                    <IonTextarea
+                      rows={4}
                       onIonInput={this.handleDescription}
-                    ></IonInput>
+                    ></IonTextarea>
                   </IonItem>
                   <IonItem>
                     <IonGrid>

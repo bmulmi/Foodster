@@ -36,7 +36,7 @@ import "./theme/variables.css";
 import "./theme/fonts.css";
 
 /* Global CSS */
-import "./global.css";
+// import "./global.css";
 export interface AppProps {}
 
 export interface AppState {}
